@@ -1,0 +1,41 @@
+{
+    "name": "backend",
+    "version": "0.1.0",
+    "description": "Backend for final project of course W13",
+    "main": "index.js",
+    "scripts": {
+        "dev": "nodemon index.js",
+        "start": "node index.js",
+        "test": "jest test.js",
+        "doc": "npx jsdoc index.js",
+        "db": "npx sequelize-cli init",
+        "migrations-undo": "npx sequelize db:migrate:undo:all",
+        "migrations": "npx sequelize db:migrate",
+        "seed": "npx sequelize-cli db:seed:all"
+    },
+    "author": "Hector Fonseca <jairfonseca64@yahoo.es>",
+    "license": "UNLICENCED",
+    "devDependencies": {
+        "cors": "^2.8.5",
+        "eslint": "^8.23.0",
+        "eslint-config-standard": "^17.0.0",
+        "eslint-plugin-import": "^2.26.0",
+        "eslint-plugin-node": "^11.1.0",
+        "eslint-plugin-promise": "^6.0.1",
+        "eslint-plugin-standard": "^5.0.0",
+        "jsdoc": "^3.6.11",
+        "morgan": "^1.10.0",
+        "nodemon": "^2.0.19",
+        "sequelize-cli": "^6.4.1"
+    },
+    "dependencies": {
+        "axios": "^0.27.2",
+        "bcryptjs": "^2.4.3",
+        "express": "^4.18.1",
+        "express-validator": "^6.14.2",
+        "jsonwebtoken": "^8.5.1",
+        "pg": "^8.8.0",
+        "pg-hstore": "^2.3.4",
+        "sequelize": "^6.21.4"
+    }
+}

@@ -1,0 +1,2 @@
+alter table "Playlist" add constraint fk_playlist_type FOREIGN KEY (type_id) references "Type" (id);
+alter table "Playlist" add constraint fk_playlist_user FOREIGN KEY (user_id) references "Users" (id);

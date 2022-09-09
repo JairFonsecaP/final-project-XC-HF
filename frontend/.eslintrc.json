@@ -1,0 +1,21 @@
+// {
+//     "extends": ["standard", "react-app"],
+//     "rules": {
+//         "indent": ["error", 4],
+//         "react/jsx-indent": ["error", 4],
+//         "react/jsx-indent-props": ["error", 4],
+//         "react/prop-types": 0,
+//         "semi": ["error", "always"]
+//     },
+//     "overrides": [
+//         {
+//             "files": ["**/*.js"]
+//         }
+//     ],
+//     "env": {
+//         "browser": true,
+//         "node": true,
+//         "es6": true
+//     }
+// }
+{}
