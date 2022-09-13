@@ -29,11 +29,27 @@ exports.addAlbumAsFavorite = async (req, res) => {
 
 exports.getAlbumByName = async (req, res) => {
     try {
-        //TODO validate parameters
         const { data } = await axios.get(
             `https://api.discogs.com/database/search?token=${DISCOGS_TOKEN}&release_title=${req.params.name}`
         );
-        res.status(200).json(data);
+
+        let toReturn = [];
+        for (let i = 0; i < data.results.length; i++) {
+            const album = data.results[i];
+            const response = await Playlist.findOne(
+                { raw: true, neft: true },
+                { where: { itemId: album.id } }
+            );
+
+            if (response.itemId === album.id) {
+                album.favorite = 1;
+            } else {
+                album.favorite = 0;
+            }
+
+            toReturn = [...toReturn, album];
+        }
+        res.status(200).json(toReturn);
     } catch (e) {
         res.status(500).json({
             errors: [
