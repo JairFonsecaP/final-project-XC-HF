@@ -10,6 +10,7 @@ exports.addAlbumAsFavorite = async (req, res) => {
         const data = {
             typeId: 1,
             itemId: req.body.itemId,
+            name: req.body.name,
             userId: id
         };
         const response = await Playlist.create(data);
@@ -75,7 +76,6 @@ exports.getFavoritesByMasterId = async (master_id) => {
 exports.getFavorites = async (req, res) => {
     try {
         const { id } = await decode(req.headers.token);
-        //TODO validate parameters
         let response = await Playlist.findAll(
             { raw: true, neft: true },
             { where: { typeId: 1, userId: id } }
@@ -84,11 +84,16 @@ exports.getFavorites = async (req, res) => {
         let newResponse = [];
 
         for (let i = 0; i < response.length; i++) {
-            const { data } = await this.getFavoritesByMasterId(
-                response[i].itemId
+            const { data } = await axios.get(
+                `https://api.discogs.com/database/search?token=${DISCOGS_TOKEN}&release_title=${response[i].name}`
             );
-            response[i] = { ...response[i], info: data };
-            newResponse = [...newResponse, response[i]];
+
+            let filtered = data.results.filter(
+                (album) => album.id === response[i].itemId
+            );
+
+            filtered[0].favorite = 1;
+            newResponse = [...newResponse, filtered[0]];
         }
         res.status(200).json(newResponse);
     } catch (e) {
@@ -106,8 +111,6 @@ exports.getFavorites = async (req, res) => {
 exports.deleteFavorite = async (req, res) => {
     try {
         //TODO validate parameters
-
-        console.log('deleteFavorite');
         const { id } = await decode(req.headers.token);
         const response = await Playlist.destroy({
             where: { itemId: req.params.id, userId: id }
