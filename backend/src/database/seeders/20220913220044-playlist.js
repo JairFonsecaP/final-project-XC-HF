@@ -4,7 +4,7 @@ module.exports = {
     async up(queryInterface, Sequelize) {
         const date = new Date();
         await queryInterface.bulkInsert(
-            'Playlist',
+            'Playlists',
             [
                 {
                     typeId: 1,
