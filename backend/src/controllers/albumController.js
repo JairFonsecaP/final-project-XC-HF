@@ -4,6 +4,24 @@ const { DISCOGS_TOKEN } = require('../config/config');
 const { Playlist } = require('../database/models');
 const { decode } = require('../services/token');
 
+exports.detailAlbum = async (req, res) => {
+    try {
+        const { data } = await axios.get(
+            `https://api.discogs.com/releases/${req.params.id}`
+        );
+        res.status(200).json(data);
+    } catch (e) {
+        res.status(500).json({
+            errors: [
+                {
+                    msg: 'Error adding favorite album. ' + e.message,
+                    param: 'Internal server'
+                }
+            ]
+        });
+    }
+};
+
 exports.addAlbumAsFavorite = async (req, res) => {
     try {
         const { id } = await decode(req.headers.token);

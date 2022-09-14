@@ -13,6 +13,14 @@ module.exports = {
                         '$2a$10$4mGitGojraStEcvOReLCzOXmgrWtmUm7vDG3A9G6wB23LLz4H4zUu',
                     createdAt: date,
                     updatedAt: date
+                },
+                {
+                    name: 'User',
+                    username: 'user',
+                    password:
+                        '$2a$10$4mGitGojraStEcvOReLCzOXmgrWtmUm7vDG3A9G6wB23LLz4H4zUu',
+                    createdAt: date,
+                    updatedAt: date
                 }
             ],
             {}
