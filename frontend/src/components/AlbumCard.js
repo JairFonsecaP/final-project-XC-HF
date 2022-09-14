@@ -1,10 +1,13 @@
 import React from "react";
-import { Card, Rate } from "antd";
+import { Card, Rate, Button } from "antd";
 import { UserOutlined, HeartFilled } from "@ant-design/icons";
 import axios from "axios";
 import api from "../assets/api";
 
+import { useHistory } from "react-router-dom";
+
 const AlbumCard = props => {
+  const history = useHistory();
   const addToFavorite = async () => {
     try {
       if (props.album.favorite) {
@@ -21,6 +24,7 @@ const AlbumCard = props => {
           { headers: { token: props.token } }
         );
       }
+      props.setValue("");
       props.init();
     } catch (e) {
       console.log(e.message);
@@ -72,6 +76,14 @@ const AlbumCard = props => {
       ) : (
         <UserOutlined />
       )}
+      <Button
+        type="button"
+        onClick={() => {
+          history.push(`/dashboard/albums/detail/${props.album.id}`);
+        }}
+      >
+        Details
+      </Button>
     </Card>
   );
 };

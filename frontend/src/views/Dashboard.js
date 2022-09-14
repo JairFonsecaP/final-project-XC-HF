@@ -8,6 +8,7 @@ import { Layout, Menu } from "antd";
 import React, { useState } from "react";
 import { Route, Switch, useHistory, Redirect } from "react-router-dom";
 import Albums from "../components/Albums";
+import AlbumDetail from "../components/AlbumDetail";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -106,6 +107,14 @@ const Dashboard = props => {
             <Switch>
               <Route path="/dashboard/albums" exact>
                 <Albums
+                  token={props.token}
+                  setToken={props.setToken}
+                  setUser={props.setUser}
+                  user={props.user}
+                />
+              </Route>
+              <Route path="/dashboard/albums/detail/:id" exact>
+                <AlbumDetail
                   token={props.token}
                   setToken={props.setToken}
                   setUser={props.setUser}

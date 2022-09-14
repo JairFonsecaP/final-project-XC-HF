@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Card, Col, Row, Empty } from "antd";
+import { Col, Row, Empty } from "antd";
 import Alerts from "./Alerts";
 import api from "../assets/api";
 import axios from "axios";
@@ -38,6 +38,7 @@ const Albums = props => {
         setList={setList}
         setTitle={setTitle}
         setValue={setValue}
+        value={value}
         init={init}
       />
       {list && list.length === 0 ? (
@@ -70,6 +71,7 @@ const Albums = props => {
                       token={props.token}
                       value={value}
                       init={init}
+                      setValue={setValue}
                     />
                   </Col>
                 );
