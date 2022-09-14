@@ -3,8 +3,8 @@ import { Card, Col, Row, Empty } from "antd";
 import Alerts from "./Alerts";
 import api from "../assets/api";
 import axios from "axios";
-import { UserOutlined } from "@ant-design/icons";
 import SearchAlbum from "./SearchAlbum";
+import AlbumCard from "./AlbumCard";
 
 const Albums = props => {
   const [list, setList] = useState([]);
@@ -15,6 +15,7 @@ const Albums = props => {
       const { data } = await axios.get(`${api}album/favorites`, {
         headers: { token: props.token }
       });
+
       setList(data);
     } catch (e) {
       const Errors = e.response.data.errors;
@@ -31,7 +32,7 @@ const Albums = props => {
   return (
     <>
       <SearchAlbum token={props.token} setList={setList} init={init} />
-      {list.length === 0 ? (
+      {list && list.length === 0 ? (
         <Empty />
       ) : (
         <div className="site-card-wrapper">
@@ -47,32 +48,19 @@ const Albums = props => {
           <h1>My Favorite Albums</h1>
 
           <Row gutter={16}>
-            {list.map((album, i) => {
-              return (
-                <Col
-                  span={8}
-                  style={{ marginBottom: "10px" }}
-                  key={album + i}
-                  title={album.title}
-                >
-                  <Card body title={album.title} bordered={true}>
-                    {album.cover_image !== "" ? (
-                      <img
-                        src={album.cover_image}
-                        alt={album.title}
-                        style={{
-                          height: "150px",
-                          width: "150px",
-                          margin: "0 auto"
-                        }}
-                      />
-                    ) : (
-                      <UserOutlined />
-                    )}
-                  </Card>
-                </Col>
-              );
-            })}
+            {list &&
+              list.map((album, i) => {
+                return (
+                  <Col
+                    span={8}
+                    style={{ marginBottom: "10px" }}
+                    key={album + i}
+                    title={album.title}
+                  >
+                    <AlbumCard album={album} />
+                  </Col>
+                );
+              })}
           </Row>
         </div>
       )}

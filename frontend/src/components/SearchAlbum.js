@@ -12,7 +12,8 @@ const SearchAlbum = props => {
         const { data } = await axios.get(`${api}album/getAlbum/${value}`, {
           headers: { token: props.token }
         });
-        props.setList(data.results);
+        console.log(data);
+        props.setList(data);
       } catch (e) {}
     } else {
       props.init();
@@ -20,7 +21,7 @@ const SearchAlbum = props => {
   };
   return (
     <Search
-      placeholder="Enter a song"
+      placeholder="Enter an album"
       allowClear
       enterButton="Search"
       size="large"
