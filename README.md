@@ -5,7 +5,7 @@ ________________________________
 
 ### DB
 
-Run the followin comand on postgres "run separately".
+Run the following script on postgres "run separately".
 ```sql
 CREATE DATABASE musicplaylist;
 ```
