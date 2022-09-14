@@ -1,10 +1,12 @@
 'use strict';
+
 import React, { useState, useEffect } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import { isExpired, decodeToken } from 'react-jwt';
 
 import Login from './views/Login';
 import Register from './views/Register';
+import NotFound from './views/NotFound';
 import PrivateRouter from './components/PrivateRouter';
 
 const App = () => {
@@ -21,7 +23,7 @@ const App = () => {
         } else {
             setToken(null);
             setUser(null);
-            localStorage.removeItem('token');
+
             return <Redirect to='/' />;
         }
     };
@@ -43,7 +45,7 @@ const App = () => {
                 />
             </Route>
             <Route path='/register' exact>
-                {!user ? <Register /> : <Redirect to='/dashboard/list' />}
+                {!user ? <Register /> : <Redirect to='/dashboard' />}
             </Route>
             <Route path='/' exact>
                 {!user ? (
@@ -54,8 +56,11 @@ const App = () => {
                         user={user}
                     />
                 ) : (
-                    <Redirect to='/dashboard/list' />
+                    <Redirect to='/dashboard' />
                 )}
+            </Route>
+            <Route>
+                <NotFound />
             </Route>
         </Switch>
     );

@@ -29,6 +29,7 @@ exports.addAlbumAsFavorite = async (req, res) => {
 
 exports.getAlbumByName = async (req, res) => {
     try {
+        const { id } = await decode(req.headers.token);
         const { data } = await axios.get(
             `https://api.discogs.com/database/search?token=${DISCOGS_TOKEN}&release_title=${req.params.name}`
         );
@@ -38,7 +39,7 @@ exports.getAlbumByName = async (req, res) => {
             const album = data.results[i];
             const response = await Playlist.findOne(
                 { raw: true, neft: true },
-                { where: { itemId: album.id } }
+                { where: { itemId: album.id, userId: id } }
             );
 
             if (response.itemId === album.id) {
@@ -126,7 +127,6 @@ exports.getFavorites = async (req, res) => {
 
 exports.deleteFavorite = async (req, res) => {
     try {
-        //TODO validate parameters
         const { id } = await decode(req.headers.token);
         const response = await Playlist.destroy({
             where: { itemId: req.params.id, userId: id }
