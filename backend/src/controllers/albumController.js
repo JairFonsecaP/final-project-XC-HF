@@ -59,8 +59,7 @@ exports.getAlbumByName = async (req, res) => {
                 { raw: true, neft: true },
                 { where: { itemId: album.id, userId: id } }
             );
-
-            if (response.itemId === album.id) {
+            if (response && response.itemId === album.id) {
                 album.favorite = 1;
             } else {
                 album.favorite = 0;
