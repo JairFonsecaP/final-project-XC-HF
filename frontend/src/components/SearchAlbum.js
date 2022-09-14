@@ -14,6 +14,8 @@ const SearchAlbum = props => {
         });
         console.log(data);
         props.setList(data);
+        props.setValue(value);
+        props.setTitle(`Results for "${value}"`);
       } catch (e) {}
     } else {
       props.init();

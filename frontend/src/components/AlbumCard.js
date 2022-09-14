@@ -1,18 +1,31 @@
 import React from "react";
 import { Card, Rate } from "antd";
 import { UserOutlined, HeartFilled } from "@ant-design/icons";
-
-const addToFavorite = async () => {
-  try {
-    const { data } = await axios.get(`${api}album/getAlbum/${value}`, {
-      headers: { token: props.token }
-    });
-    console.log(data);
-    props.setList(data);
-  } catch (e) {}
-};
+import axios from "axios";
+import api from "../assets/api";
 
 const AlbumCard = props => {
+  const addToFavorite = async () => {
+    try {
+      if (props.album.favorite) {
+        const { data } = await axios.delete(
+          `${api}album/delete/${props.album.id}`,
+          {
+            headers: { token: props.token }
+          }
+        );
+      } else {
+        const { data } = await axios.post(
+          `${api}album/addFavorite`,
+          { itemId: props.album.id, name: props.value },
+          { headers: { token: props.token } }
+        );
+      }
+      props.init();
+    } catch (e) {
+      console.log(e.message);
+    }
+  };
   return (
     <Card
       body
@@ -38,14 +51,14 @@ const AlbumCard = props => {
           style={{ color: "#a03f20", fontSize: "15px" }}
           count="1"
           tooltips={["Add album as favorite"]}
-          onClick={addToFavorite}
+          onChange={addToFavorite}
         />
       </div>
-      {props.album.cover_image !== "" ? (
+      <p>
+        {props.album.year} - {props.album.country}
+      </p>
+      {props.album.cover_image ? (
         <>
-          <p>
-            {props.album.year} - {props.album.country}
-          </p>
           <img
             src={props.album.cover_image}
             alt={props.album.title}

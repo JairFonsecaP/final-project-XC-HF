@@ -8,6 +8,8 @@ import AlbumCard from "./AlbumCard";
 
 const Albums = props => {
   const [list, setList] = useState([]);
+  const [title, setTitle] = useState([]);
+  const [value, setValue] = useState([]);
   const [errors, setErrors] = useState([]);
 
   const init = async () => {
@@ -15,7 +17,7 @@ const Albums = props => {
       const { data } = await axios.get(`${api}album/favorites`, {
         headers: { token: props.token }
       });
-
+      setTitle("My Favorite Albums");
       setList(data);
     } catch (e) {
       const Errors = e.response.data.errors;
@@ -31,7 +33,13 @@ const Albums = props => {
 
   return (
     <>
-      <SearchAlbum token={props.token} setList={setList} init={init} />
+      <SearchAlbum
+        token={props.token}
+        setList={setList}
+        setTitle={setTitle}
+        setValue={setValue}
+        init={init}
+      />
       {list && list.length === 0 ? (
         <Empty />
       ) : (
@@ -45,7 +53,7 @@ const Albums = props => {
               type="error"
             />
           ))}
-          <h1>My Favorite Albums</h1>
+          <h1>{title}</h1>
 
           <Row gutter={16}>
             {list &&
@@ -57,7 +65,12 @@ const Albums = props => {
                     key={album + i}
                     title={album.title}
                   >
-                    <AlbumCard album={album} />
+                    <AlbumCard
+                      album={album}
+                      token={props.token}
+                      value={value}
+                      init={init}
+                    />
                   </Col>
                 );
               })}
