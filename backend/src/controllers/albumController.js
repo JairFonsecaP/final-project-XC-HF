@@ -125,9 +125,10 @@ exports.getFavorites = async (req, res) => {
             let filtered = data.results.filter(
                 (album) => album.id === response[i].itemId
             );
-
-            filtered[0].favorite = 1;
-            newResponse = [...newResponse, filtered[0]];
+            if (filtered.length > 0) {
+                filtered[0].favorite = 1;
+                newResponse = [...newResponse, filtered[0]];
+            }
         }
         res.status(200).json(newResponse);
     } catch (e) {
