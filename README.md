@@ -1225,3 +1225,5 @@ code: 404
 	]
 }
 ```
+
+# [Continue in README_FRONTEND.md](/README_FRONTEND.md)
