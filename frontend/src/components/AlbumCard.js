@@ -78,8 +78,12 @@ const AlbumCard = props => {
       )}
       <Button
         type="button"
+        album={props.album}
         onClick={() => {
-          history.push(`/dashboard/albums/detail/${props.album.id}`);
+          history.push({
+            pathname: `/dashboard/albums/detail/${props.album.id}`,
+            state: { album: props.album }
+          });
         }}
       >
         Details
