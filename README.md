@@ -42,7 +42,7 @@ Body
 
 Response:
 ```JSON
-201
+code: 201
 {
     "success": {
         "msg": "User created, you can login now"
@@ -50,7 +50,7 @@ Response:
 }
 ```
 ```JSON
-400
+code: 400
 {
 	"errors": [
 		{
@@ -73,7 +73,7 @@ Response:
 }
 ```
 ```JSON
-409
+code: 409
 {
 	"errors": [
 		{
@@ -95,13 +95,13 @@ Body
 
 Response
 ```JSON
-200
+code: 200
 {
 	"token": {token}
 }
 ```
 ```JSON
-401
+code: 401
 {
 	"errors": [
 		{
@@ -112,14 +112,14 @@ Response
 }
 ```
 ```JSON
-500
+code: 500
 {
-            "errors": [
-                {
-                    "msg": {message},
-                    "param": "server"
-                }
-            ]
+    "errors": [
+        {
+            "msg": {message},
+            "param": "server"
         }
+    ]
+}
 ```
 

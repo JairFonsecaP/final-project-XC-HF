@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = {
-    async up(queryInterface, Sequelize) {
+    up: async (queryInterface, Sequelize) => {
         const date = new Date();
         await queryInterface.bulkInsert(
             'Playlists',
@@ -27,7 +27,7 @@ module.exports = {
         );
     },
 
-    async down(queryInterface, Sequelize) {
+    down: async (queryInterface, Sequelize) => {
         /**
          * Add commands to revert seed here.
          *

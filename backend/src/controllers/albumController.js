@@ -1,182 +1,212 @@
-"use strict";
-const axios = require("axios");
-const { DISCOGS_TOKEN } = require("../config/config");
-const { Playlist } = require("../database/models");
-const { decode } = require("../services/token");
+'use strict';
+/**
+ * Importations
+ */
+const axios = require('axios');
+const { DISCOGS_TOKEN } = require('../config/config');
+const { Playlist } = require('../database/models');
+const { decode } = require('../services/token');
 
+/**
+ * Gets from discogs an album and all its details like tracklist and links to youtube
+ * @param {number} req.params.id
+ * @error returns 500 and a message for knowing where is the error
+ * @returns 200 and a json with the information
+ */
 exports.detailAlbum = async (req, res) => {
-  try {
-    const { data } = await axios.get(
-      `https://api.discogs.com/releases/${req.params.id}`
-    );
-    res.status(200).json(data);
-  } catch (e) {
-    res.status(500).json({
-      errors: [
-        {
-          msg: "Error adding favorite album. " + e.message,
-          param: "Internal server"
-        }
-      ]
-    });
-  }
+    try {
+        const { data } = await axios.get(
+            `https://api.discogs.com/releases/${req.params.id}`
+        );
+        res.status(200).json(data);
+    } catch (e) {
+        res.status(500).json({
+            errors: [
+                {
+                    msg: 'Error adding favorite album. ' + e.message,
+                    param: 'Internal server'
+                }
+            ]
+        });
+    }
 };
 
+/**
+ * Stores on db an album as favorite, verifies user by token.
+ * @param {Number} req.body.itemId
+ * @param {string} req.body.name
+ * @param {string} req.headers.token
+ * @returns 201 and a json with the information
+ */
 exports.addAlbumAsFavorite = async (req, res) => {
-  try {
-    const { id } = await decode(req.headers.token);
-    const data = {
-      typeId: 1,
-      itemId: req.body.itemId,
-      name: req.body.name,
-      userId: id
-    };
-    const response = await Playlist.create(data);
-    res.status(201).json(response);
-  } catch (e) {
-    res.status(500).json({
-      errors: [
-        {
-          msg: "Error adding favorite album. " + e.message,
-          param: "Internal server"
-        }
-      ]
-    });
-  }
+    try {
+        const { id } = await decode(req.headers.token);
+        const data = {
+            typeId: 1,
+            itemId: req.body.itemId,
+            name: req.body.name,
+            userId: id
+        };
+        const response = await Playlist.create(data);
+        res.status(201).json(response);
+    } catch (e) {
+        res.status(500).json({
+            errors: [
+                {
+                    msg: 'Error adding favorite album. ' + e.message,
+                    param: 'Internal server'
+                }
+            ]
+        });
+    }
 };
 
+/**
+ * Gets all albums wiht a name, then checks for each album if this user has it as favorite
+ * @param {string} req.headers.token
+ * @param {string} req.params.name
+ */
 exports.getAlbumByName = async (req, res) => {
-  try {
-    const { id } = await decode(req.headers.token);
-    const { data } = await axios.get(
-      `https://api.discogs.com/database/search?token=${DISCOGS_TOKEN}&release_title=${req.params.name}`
-    );
+    try {
+        const { id } = await decode(req.headers.token);
+        const { data } = await axios.get(
+            `https://api.discogs.com/database/search?token=${DISCOGS_TOKEN}&release_title=${req.params.name}`
+        );
 
-    let toReturn = [];
-    for (let i = 0; i < data.results.length; i++) {
-      const album = data.results[i];
-      const response = await Playlist.findOne(
-        { raw: true, neft: true },
-        { where: { itemId: album.id, userId: id } }
-      );
-      if (response && response.itemId === album.id) {
-        album.favorite = 1;
-      } else {
-        album.favorite = 0;
-      }
+        let toReturn = [];
+        for (let i = 0; i < data.results.length; i++) {
+            const album = data.results[i];
+            const response = await Playlist.findOne(
+                { raw: true, neft: true },
+                { where: { itemId: album.id, userId: id } }
+            );
+            if (response && response.itemId === album.id) {
+                album.favorite = 1;
+            } else {
+                album.favorite = 0;
+            }
 
-      toReturn = [...toReturn, album];
+            toReturn = [...toReturn, album];
+        }
+        res.status(200).json(toReturn);
+    } catch (e) {
+        res.status(500).json({
+            errors: [
+                {
+                    msg: 'Error getting album by name. ' + e.message,
+                    param: 'Internal server'
+                }
+            ]
+        });
     }
-    res.status(200).json(toReturn);
-  } catch (e) {
-    res.status(500).json({
-      errors: [
-        {
-          msg: "Error getting album by name. " + e.message,
-          param: "Internal server"
-        }
-      ]
-    });
-  }
 };
 
-exports.getAlbumByMasterId = async (req, res) => {
-  try {
-    //TODO validate parameters
-    const { data } = await axios.get(
-      `https://api.discogs.com/masters/${req.params.id}`
-    );
+// exports.getAlbumByMasterId = async (req, res) => {
+//     try {
+//         // TODO validate parameters
+//         const { data } = await axios.get(
+//             `https://api.discogs.com/masters/${req.params.id}`
+//         );
 
-    res.status(200).json(data);
-  } catch (e) {
-    res.status(500).json({
-      errors: [
-        {
-          msg: "Error getting album by Master Id. " + e.message,
-          param: "Internal server"
-        }
-      ]
-    });
-  }
-};
+//         res.status(200).json(data);
+//     } catch (e) {
+//         res.status(500).json({
+//             errors: [
+//                 {
+//                     msg: 'Error getting album by Master Id. ' + e.message,
+//                     param: 'Internal server'
+//                 }
+//             ]
+//         });
+//     }
+// };
 
-exports.getFavoritesByMasterId = async master_id => {
-  const favorites = await axios.get(
-    `https://api.discogs.com/masters/${master_id}`
-  );
-  return favorites;
-};
+// exports.getFavoritesByMasterId = async (masterId) => {
+//     const favorites = await axios.get(
+//         `https://api.discogs.com/masters/${masterId}`
+//     );
+//     return favorites;
+// };
 
+/**
+ * Gets from db all albumns strored for this user and does a petition to discogs api for get more information for each album
+ * @param {string} req.headers.token
+ */
 exports.getFavorites = async (req, res) => {
-  try {
-    const { id } = await decode(req.headers.token);
-    let response = await Playlist.findAll(
-      { raw: true, neft: true },
-      { where: { typeId: 1, userId: id } }
-    );
-    let newResponse = [];
+    try {
+        const { id } = await decode(req.headers.token);
+        const response = await Playlist.findAll(
+            { raw: true, neft: true },
+            { where: { typeId: 1, userId: id } }
+        );
+        let newResponse = [];
 
-    for (let i = 0; i < response.length; i++) {
-      const { data } = await axios.get(
-        `https://api.discogs.com/database/search?token=${DISCOGS_TOKEN}&release_title=${response[i].name}`
-      );
+        for (let i = 0; i < response.length; i++) {
+            const { data } = await axios.get(
+                `https://api.discogs.com/database/search?token=${DISCOGS_TOKEN}&release_title=${response[i].name}`
+            );
 
-      console.log(data);
-      let filtered = data.results.filter(
-        album => album.id === response[i].itemId
-      );
-      if (filtered.length > 0) {
-        filtered[0].favorite = 1;
-        newResponse = [...newResponse, filtered[0]];
-      }
-    }
-    res.status(200).json(newResponse);
-  } catch (e) {
-    res.status(500).json({
-      errors: [
-        {
-          msg: "Error getting favorite album. " + e.message,
-          param: "Internal server"
+            console.log(data);
+            const filtered = data.results.filter(
+                (album) => album.id === response[i].itemId
+            );
+            if (filtered.length > 0) {
+                filtered[0].favorite = 1;
+                newResponse = [...newResponse, filtered[0]];
+            }
         }
-      ]
-    });
-  }
+        res.status(200).json(newResponse);
+    } catch (e) {
+        res.status(500).json({
+            errors: [
+                {
+                    msg: 'Error getting favorite album. ' + e.message,
+                    param: 'Internal server'
+                }
+            ]
+        });
+    }
 };
 
+/**
+ * Deletes on db the album stored
+ * @param {string} req.headers.token
+ * @param {number} req.params.id
+ */
 exports.deleteFavorite = async (req, res) => {
-  try {
-    const { id } = await decode(req.headers.token);
-    const response = await Playlist.destroy({
-      where: { itemId: req.params.id, userId: id }
-    });
+    try {
+        const { id } = await decode(req.headers.token);
+        const response = await Playlist.destroy({
+            where: { itemId: req.params.id, userId: id }
+        });
 
-    if (response != 0) {
-      res.status(200).json({
-        success: [
-          {
-            msg: "Album deleted successfully!",
-            param: "Success"
-          }
-        ]
-      });
-    } else {
-      res.status(404).json({
-        errors: [
-          {
-            msg: "Error deleting favorite album. Album not found.",
-            param: "Not found"
-          }
-        ]
-      });
-    }
-  } catch (e) {
-    res.status(500).json({
-      errors: [
-        {
-          msg: "Error deleting favorite album. " + e.message,
-          param: "Internal server"
+        if (response !== 0) {
+            res.status(200).json({
+                success: [
+                    {
+                        msg: 'Album deleted successfully!',
+                        param: 'Success'
+                    }
+                ]
+            });
+        } else {
+            res.status(404).json({
+                errors: [
+                    {
+                        msg: 'Error deleting favorite album. Album not found.',
+                        param: 'Not found'
+                    }
+                ]
+            });
         }
-      ]
-    });
-  }
+    } catch (e) {
+        res.status(500).json({
+            errors: [
+                {
+                    msg: 'Error deleting favorite album. ' + e.message,
+                    param: 'Internal server'
+                }
+            ]
+        });
+    }
 };

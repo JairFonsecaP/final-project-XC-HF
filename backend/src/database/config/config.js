@@ -1,4 +1,6 @@
+'use strict';
 module.exports = {
+    // Credential for development db
     development: {
         username: 'test',
         password: 'test',
@@ -7,6 +9,7 @@ module.exports = {
         dialect: 'postgres',
         logging: false
     },
+    // Credential for test db
     test: {
         username: 'root',
         password: null,
@@ -15,6 +18,7 @@ module.exports = {
         dialect: 'mysql',
         logging: false
     },
+    // Credential for production db
     production: {
         username: 'root',
         password: null,

@@ -1,5 +1,7 @@
+'use strict';
 const token = require('../../services/token');
 
+// Standar error format
 const error = {
     errors: [
         {
@@ -10,6 +12,11 @@ const error = {
 };
 
 module.exports = {
+    /**
+     * Middleware which checks if a petition has a valid token and allows continue otherwise returns errors.
+     * @param {string} req.headers.token
+     * @returns 401 if token doesn't exist or the token isn't valid
+     */
     verifyUser: async (req, res, next) => {
         try {
             if (!req.headers.token) {
