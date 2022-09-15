@@ -1,7 +1,6 @@
 # final-project-XC-HF
 
 ## Backend
-________________________________
 
 ### DB
 
@@ -123,3 +122,92 @@ code: 500
 }
 ```
 
+* Authentication
+
+For the rest endpoints you must to send the token inside the header...
+Example to set headers with axios.
+
+```javascript
+import axios from 'axios';
+
+axios.get('/route', { headers: { token: '' } })
+```
+If you don't send a valid token the response is:
+
+```JSON
+code: 401
+{
+	"errors": [
+		{
+			"msg": "Please enter your credentials",
+			"param": "Login"
+		}
+	]
+}
+```
+
+* Albums
+```
+GET
+/v1/api/album/getalbum/{name}
+
+	string name (required)
+```
+Response:
+```JSON
+code: 200
+[
+	{
+		"country": "Unknown",
+		"year": "2020",
+		"format": [
+			"File",
+			"AAC",
+			"Album"
+		],
+		"label": [
+			"Rimas Entertainment LLC"
+		],
+		"type": "release",
+		"genre": [
+			"Hip Hop",
+			"Reggae",
+			"Latin"
+		],
+		"style": [
+			"Reggaeton",
+			"Reggae-Pop"
+		],
+		"id": 14860897,
+		"barcode": [],
+		"user_data": {
+			"in_wantlist": false,
+			"in_collection": false
+		},
+		"master_id": 1691517,
+		"master_url": "https://api.discogs.com/masters/1691517",
+		"uri": "/release/14860897-Bad-Bunny-YHLQMDLG",
+		"catno": "none",
+		"title": "Bad Bunny - YHLQMDLG",
+		"thumb": "https://i.discogs.com/Yu_HDLra4KUyuGqKEOYrnVmpxISawe3zSRCKqkPigwc/rs:fit/g:sm/q:40/h:150/w:150/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTE0ODYw/ODk3LTE1ODMzNzE5/OTEtOTM1My5qcGVn.jpeg",
+		"cover_image": "https://i.discogs.com/9IWgtGzdwhFcRaBroRHJeSbUJdoVbnWwsxGpvIYJmvc/rs:fit/g:sm/q:90/h:600/w:600/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTE0ODYw/ODk3LTE1ODMzNzE5/OTEtOTM1My5qcGVn.jpeg",
+		"resource_url": "https://api.discogs.com/releases/14860897",
+		"community": {
+			"want": 112,
+			"have": 62
+		},
+		"format_quantity": 0,
+		"formats": [
+			{
+				"name": "File",
+				"qty": "20",
+				"text": "256 Kbps",
+				"descriptions": [
+					"AAC",
+					"Album"
+				]
+			}
+		],
+		"favorite": 0	}
+]
+```
