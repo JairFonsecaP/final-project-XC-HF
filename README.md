@@ -242,6 +242,8 @@ code: 200
 ```
 GET
 /v1/api/album/detail/{id}
+
+	Number id: (required)
 ```
 Response
 ```JSON
@@ -1197,6 +1199,8 @@ code: 209
 ```
 DELETE
 /v1/api/delete/{id}
+
+	Number id: (required)
 ```
 ```JSON
 code: 200
