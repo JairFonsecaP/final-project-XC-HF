@@ -47,8 +47,10 @@ exports.addAlbumAsFavorite = async (req, res) => {
             name: req.body.name,
             userId: id
         };
-        const response = await Playlist.create(data);
-        res.status(201).json(response);
+        await Playlist.create(data);
+        res.status(201).json({
+            success: { msg: 'Album was added as favorite' }
+        });
     } catch (e) {
         res.status(500).json({
             errors: [
@@ -119,7 +121,6 @@ exports.getFavorites = async (req, res) => {
                 `https://api.discogs.com/database/search?token=${DISCOGS_TOKEN}&release_title=${response[i].name}`
             );
 
-            console.log(data);
             const filtered = data.results.filter(
                 (album) => album.id === response[i].itemId
             );
