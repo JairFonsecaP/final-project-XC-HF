@@ -1,6 +1,6 @@
 import React from "react";
-import { Card, Rate, Button } from "antd";
-import { UserOutlined, HeartFilled } from "@ant-design/icons";
+import { Card, Rate, Button, Row, Col } from "antd";
+import { UserOutlined, HeartFilled, HeartTwoTone } from "@ant-design/icons";
 import axios from "axios";
 import api from "../assets/api";
 
@@ -38,26 +38,6 @@ const AlbumCard = props => {
       style={{ width: 250 }}
       hoverable
     >
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-evenly",
-          alignItems: "center",
-          fontSize: "15px"
-        }}
-      >
-        <b>Add to Favorites</b>
-        <Rate
-          character={<HeartFilled />}
-          defaultValue="0"
-          value={props.album.favorite}
-          allowClear
-          style={{ color: "#a03f20", fontSize: "15px" }}
-          count="1"
-          tooltips={["Add album as favorite"]}
-          onChange={addToFavorite}
-        />
-      </div>
       <p>
         {props.album.year} - {props.album.country}
       </p>
@@ -76,18 +56,40 @@ const AlbumCard = props => {
       ) : (
         <UserOutlined />
       )}
-      <Button
-        type="button"
-        album={props.album}
-        onClick={() => {
-          history.push({
-            pathname: `/dashboard/albums/detail/${props.album.id}`,
-            state: { album: props.album }
-          });
-        }}
-      >
-        Details
-      </Button>
+
+      <Row>
+        <Col className="gutter-row">
+          <Button
+            type="primary"
+            album={props.album}
+            onClick={() => {
+              history.push({
+                pathname: `/dashboard/albums/detail/${props.album.id}`,
+                state: { album: props.album }
+              });
+            }}
+          >
+            Details
+          </Button>
+        </Col>
+        <Col className="gutter-row">
+          <Rate
+            character={
+              props.album.favorite ? (
+                <HeartFilled />
+              ) : (
+                <HeartTwoTone twoToneColor="#a03f20" />
+              )
+            }
+            value={props.album.favorite}
+            allowClear
+            style={{ color: "#a03f20", fontSize: "28px" }}
+            count="1"
+            tooltips={["Add/Remove album as favorite"]}
+            onChange={addToFavorite}
+          />
+        </Col>
+      </Row>
     </Card>
   );
 };
