@@ -23,7 +23,7 @@ exports.detailAlbum = async (req, res) => {
         res.status(500).json({
             errors: [
                 {
-                    msg: 'Error adding favorite album. ' + e.message,
+                    msg: 'Error getting album. ' + e.message,
                     param: 'Internal server'
                 }
             ]
@@ -74,20 +74,24 @@ exports.getAlbumByName = async (req, res) => {
         const { data } = await axios.get(
             `https://api.discogs.com/database/search?token=${DISCOGS_TOKEN}&release_title=${req.params.name}`
         );
-
+        const response = await Playlist.findAll(
+            { raw: true, neft: true },
+            { where: { userId: id } }
+        );
+        console.log(response);
         let toReturn = [];
         for (let i = 0; i < data.results.length; i++) {
-            const album = data.results[i];
-            const response = await Playlist.findOne(
-                { raw: true, neft: true },
-                { where: { itemId: album.id, userId: id } }
-            );
-            if (response && response.itemId === album.id) {
-                album.favorite = 1;
-            } else {
-                album.favorite = 0;
+            let album = data.results[i];
+            for (let j = 0; j < response.length; j++) {
+                const save = response[j];
+                console.log(save.itemId, album.id);
+                if (save.itemId === album.id) {
+                    album = { ...album, favorite: 1 };
+                    break;
+                } else {
+                    album = { ...album, favorite: 0 };
+                }
             }
-
             toReturn = [...toReturn, album];
         }
         res.status(200).json(toReturn);

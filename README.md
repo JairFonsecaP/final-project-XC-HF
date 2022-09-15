@@ -12,7 +12,7 @@ CREATE DATABASE musicplaylist;
 CREATE USER test WITH PASSWORD 'test' SUPERUSER;
 ```
 
-Being in the directory ./Backend For running the Backend, run the following steps
+Being in the directory ./backend For running the Backend, run the following steps
 
 ```bash
 $ npm install
