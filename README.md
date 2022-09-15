@@ -243,7 +243,7 @@ code: 200
 @@ GET @@
 /v1/api/album/detail/{id}
 
-	Number id: (required)
++	Number id: (required)
 ```
 Response
 ```JSON

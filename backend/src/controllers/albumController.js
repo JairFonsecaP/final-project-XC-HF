@@ -75,8 +75,8 @@ exports.getAlbumByName = async (req, res) => {
             `https://api.discogs.com/database/search?token=${DISCOGS_TOKEN}&release_title=${req.params.name}`
         );
         const response = await Playlist.findAll(
-            { raw: true, neft: true },
-            { where: { userId: id } }
+            { where: { userId: id } },
+            { raw: true, neft: true }
         );
         console.log(response);
         let toReturn = [];
@@ -114,10 +114,12 @@ exports.getAlbumByName = async (req, res) => {
 exports.getFavorites = async (req, res) => {
     try {
         const { id } = await decode(req.headers.token);
+
         const response = await Playlist.findAll(
-            { raw: true, neft: true },
-            { where: { typeId: 1, userId: id } }
+            { where: { userId: id } },
+            { raw: false, neft: false }
         );
+        console.log(response);
         let newResponse = [];
 
         for (let i = 0; i < response.length; i++) {
