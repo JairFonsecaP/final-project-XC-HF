@@ -7,7 +7,7 @@
         "dev": "nodemon index.js",
         "start": "node index.js",
         "test": "jest test.js",
-        "doc": "npx jsdoc index.js",
+        "doc": "npx jsdoc --configure jsdoc.conf.json --recurse",
         "db": "npx sequelize-cli init",
         "migrations-undo": "npx sequelize db:migrate:undo:all",
         "migrations": "npx sequelize db:migrate",

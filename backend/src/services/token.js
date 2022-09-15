@@ -7,11 +7,13 @@ const expiration = 24 * 60 * 60;
 
 module.exports = {
     /**
+     *
      *Creates a token signed by jwt
-     * @param {string || Number} id
+     * @param {Number} id
      * @param {string} username
      * @returns String Token
      */
+
     encode: (id, username) => {
         const token = jwt.sign(
             {

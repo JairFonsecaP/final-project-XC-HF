@@ -90,7 +90,6 @@ const existUser = async (req, res, next) => {
  * Checks on db if the album was stored for the same user, otherwise allows petition cointinues
  * @param {string} req.headers.token
  * @param {Number} req.body.itemId
- * @param {*} next
  * @returns 409
  * */
 const existFavoriteAlbum = async (req, res, next) => {

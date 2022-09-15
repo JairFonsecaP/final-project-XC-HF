@@ -47,8 +47,10 @@ exports.addAlbumAsFavorite = async (req, res) => {
             name: req.body.name,
             userId: id
         };
-        const response = await Playlist.create(data);
-        res.status(201).json(response);
+        await Playlist.create(data);
+        res.status(201).json({
+            success: { msg: 'Album was added as favorite' }
+        });
     } catch (e) {
         res.status(500).json({
             errors: [
@@ -101,33 +103,6 @@ exports.getAlbumByName = async (req, res) => {
     }
 };
 
-// exports.getAlbumByMasterId = async (req, res) => {
-//     try {
-//         // TODO validate parameters
-//         const { data } = await axios.get(
-//             `https://api.discogs.com/masters/${req.params.id}`
-//         );
-
-//         res.status(200).json(data);
-//     } catch (e) {
-//         res.status(500).json({
-//             errors: [
-//                 {
-//                     msg: 'Error getting album by Master Id. ' + e.message,
-//                     param: 'Internal server'
-//                 }
-//             ]
-//         });
-//     }
-// };
-
-// exports.getFavoritesByMasterId = async (masterId) => {
-//     const favorites = await axios.get(
-//         `https://api.discogs.com/masters/${masterId}`
-//     );
-//     return favorites;
-// };
-
 /**
  * Gets from db all albumns strored for this user and does a petition to discogs api for get more information for each album
  * @param {string} req.headers.token
@@ -146,7 +121,6 @@ exports.getFavorites = async (req, res) => {
                 `https://api.discogs.com/database/search?token=${DISCOGS_TOKEN}&release_title=${response[i].name}`
             );
 
-            console.log(data);
             const filtered = data.results.filter(
                 (album) => album.id === response[i].itemId
             );
