@@ -18,9 +18,10 @@ const Login = props => {
       props.setToken(data.token);
       history.push("/dashboard/albums");
     } catch (e) {
-      const Errors = e.response.data.errors;
-      if (Errors) {
-        setErrors(Errors);
+      if (e.response.data.errors) {
+        setErrors(e.response.data.errors);
+      } else {
+        setErrors(e.message);
       }
     } finally {
       setLoading(false);

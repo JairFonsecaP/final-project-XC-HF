@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Col, Row, Empty } from "antd";
+import { Col, Row, Empty, Spin } from "antd";
 import Alerts from "./Alerts";
 import api from "../assets/api";
 import axios from "axios";
@@ -10,9 +10,12 @@ const Albums = props => {
   const [list, setList] = useState([]);
   const [title, setTitle] = useState([]);
   const [value, setValue] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState([]);
 
   const init = async () => {
+    setErrors([]);
+    setLoading(true);
     try {
       const { data } = await axios.get(`${api}album/favorites`, {
         headers: { token: props.token }
@@ -20,10 +23,13 @@ const Albums = props => {
       setTitle("My Favorite Albums");
       setList(data);
     } catch (e) {
-      const Errors = e.response.data.errors;
-      if (Errors) {
-        setErrors(Errors);
+      if (e.response.data.errors) {
+        setErrors(e.response.data.errors);
+      } else {
+        setErrors(e.message);
       }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -32,7 +38,7 @@ const Albums = props => {
   }, []);
 
   return (
-    <>
+    <Spin spinning={loading}>
       <SearchAlbum
         token={props.token}
         setList={setList}
@@ -40,6 +46,8 @@ const Albums = props => {
         setValue={setValue}
         value={value}
         init={init}
+        setLoading={setLoading}
+        setErrors={setErrors}
       />
       {list && list.length === 0 ? (
         <Empty />
@@ -72,6 +80,8 @@ const Albums = props => {
                       value={value}
                       init={init}
                       setValue={setValue}
+                      setLoading={setLoading}
+                      setErrors={setErrors}
                     />
                   </Col>
                 );
@@ -79,7 +89,7 @@ const Albums = props => {
           </Row>
         </div>
       )}
-    </>
+    </Spin>
   );
 };
 

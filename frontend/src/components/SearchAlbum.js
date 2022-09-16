@@ -7,16 +7,25 @@ const { Search } = Input;
 
 const SearchAlbum = props => {
   const onSearch = async value => {
+    props.setErrors([]);
+    props.setLoading(true);
     if (value !== "") {
       try {
         const { data } = await axios.get(`${api}album/getAlbum/${value}`, {
           headers: { token: props.token }
         });
-        console.log(data);
         props.setList(data);
         props.setValue(value);
         props.setTitle(`Results for "${value}"`);
-      } catch (e) {}
+      } catch (e) {
+        if (e.response.data.errors) {
+          props.setErrors(e.response.data.errors);
+        } else {
+          props.setErrors(e.message);
+        }
+      } finally {
+        props.setLoading(false);
+      }
     } else {
       props.init();
     }
