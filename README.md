@@ -26,8 +26,8 @@ $ npm start
 #### Endpoints V1
 
 * Users
-```
-POST
+```diff
+@@ POST @@
 /v1/api/user/register
 
 Body 
@@ -83,13 +83,13 @@ code: 409
 }
 ```
     
-```
-POST
+```diff
+@@ POST @@
 /v1/api/user/login
 
 Body 
-    string username: (required)
-    string password: (required)
++    string username: (required)
++	 string password: (required)
 ```
 
 Response
@@ -147,11 +147,11 @@ code: 401
 ```
 
 * Albums
-```
-GET
+```diff
+@@ GET @@
 /v1/api/album/getalbum/{name}
 
-	string name (required)
++	string name (required)
 ```
 Response:
 ```JSON
@@ -212,8 +212,8 @@ code: 200
 	}
 ]
 ```
-```
-GET
+```diff
+@@ GET @@
 /v1/api/album/favorites
 ```
 Response
@@ -239,11 +239,11 @@ code: 200
 	}
 ]
 ```
-```
-GET
+```diff
+@@ GET @@
 /v1/api/album/detail/{id}
 
-	Number id: (required)
++	Number id: (required)
 ```
 Response
 ```JSON
@@ -1165,13 +1165,13 @@ code: 200
 	"blocked_from_sale": false
 }
 ```
-```
-POST
+```diff
+@@ POST @@
 /v1/api/album/addFavorite
 
 Body
-	Number itemId: (required)
-    string name: (required)
++	Number itemId: (required)
++   string name: (required)
 ```
 Response
 ```JSON
@@ -1196,11 +1196,11 @@ code: 209
 	]
 }
 ```
-```
-DELETE
+```diff
+@@DELETE@@
 /v1/api/delete/{id}
 
-	Number id: (required)
++	Number id: (required)
 ```
 ```JSON
 code: 200

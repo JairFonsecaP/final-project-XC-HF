@@ -69,25 +69,32 @@ exports.addAlbumAsFavorite = async (req, res) => {
  * @param {string} req.params.name
  */
 exports.getAlbumByName = async (req, res) => {
-  try {
-    const { id } = await decode(req.headers.token);
-    const { data } = await axios.get(
-      `https://api.discogs.com/database/search?token=${DISCOGS_TOKEN}&release_title=${req.params.name}`
-    );
-    const response = await Playlist.findAll(
-      { raw: true, neft: true },
-      { where: { userId: id } }
-    );
-    let toReturn = [];
-    for (let i = 0; i < data.results.length; i++) {
-      let album = data.results[i];
-      for (let j = 0; j < response.length; j++) {
-        const save = response[j];
-        if (save.itemId === album.id) {
-          album = { ...album, favorite: 1 };
-          break;
-        } else {
-          album = { ...album, favorite: 0 };
+
+    try {
+        const { id } = await decode(req.headers.token);
+        const { data } = await axios.get(
+            `https://api.discogs.com/database/search?token=${DISCOGS_TOKEN}&release_title=${req.params.name}`
+        );
+        const response = await Playlist.findAll(
+            { where: { userId: id } },
+            { raw: true, neft: true }
+        );
+        console.log(response);
+        let toReturn = [];
+        for (let i = 0; i < data.results.length; i++) {
+            let album = data.results[i];
+            for (let j = 0; j < response.length; j++) {
+                const save = response[j];
+                console.log(save.itemId, album.id);
+                if (save.itemId === album.id) {
+                    album = { ...album, favorite: 1 };
+                    break;
+                } else {
+                    album = { ...album, favorite: 0 };
+                }
+            }
+            toReturn = [...toReturn, album];
+
         }
       }
       toReturn = [...toReturn, album];
@@ -110,13 +117,15 @@ exports.getAlbumByName = async (req, res) => {
  * @param {string} req.headers.token
  */
 exports.getFavorites = async (req, res) => {
-  try {
-    const { id } = await decode(req.headers.token);
-    const response = await Playlist.findAll(
-      { raw: true, neft: true },
-      { where: { typeId: 1, userId: id } }
-    );
-    let newResponse = [];
+    try {
+        const { id } = await decode(req.headers.token);
+
+        const response = await Playlist.findAll(
+            { where: { userId: id } },
+            { raw: false, neft: false }
+        );
+        console.log(response);
+        let newResponse = [];
 
     for (let i = 0; i < response.length; i++) {
       const { data } = await axios.get(
