@@ -117,7 +117,7 @@ exports.getFavorites = async (req, res) => {
 
         const response = await Playlist.findAll(
             { where: { userId: id } },
-            { raw: false, neft: false }
+            { raw: true, neft: true }
         );
         console.log(response);
         let newResponse = [];

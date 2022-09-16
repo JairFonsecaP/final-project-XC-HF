@@ -7,7 +7,6 @@ module.exports = {
             'Playlists',
             [
                 {
-                    typeId: 1,
                     itemId: '14860897',
                     userId: 1,
                     name: 'YHLQMDLG',
@@ -15,7 +14,6 @@ module.exports = {
                     updatedAt: date
                 },
                 {
-                    typeId: 1,
                     itemId: '12014437',
                     userId: 1,
                     name: 'La TierraDel Olvido',

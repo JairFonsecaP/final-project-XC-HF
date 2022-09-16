@@ -1226,4 +1226,13 @@ code: 404
 }
 ```
 
+#### Finally
+
+You have an user created for testing but if you want you can add others users. 
+```diff
++username: test
++password: 12345678
+```
+
+
 # [Continue in README_FRONTEND.md](/README_FRONTEND.md)
