@@ -2,6 +2,7 @@
 
 ## Backend
 
+
 ### DB
 
 Run the following script on postgres "run separately".
@@ -19,6 +20,14 @@ $ npm install
 $ npm install -g sequelize
 $ npm run migrations
 $ npm run seed
+$ npm start
+```
+## Frontend
+
+Being in the directory ./frontend For running the react views, run the following steps
+
+```bash
+$ npm install
 $ npm start
 ```
 
@@ -1233,6 +1242,3 @@ You have an user created for testing but if you want you can add others users.
 +username: test
 +password: 12345678
 ```
-
-
-# [Continue in README_FRONTEND.md](/README_FRONTEND.md)

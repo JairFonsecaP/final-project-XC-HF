@@ -1,19 +1,21 @@
-{
-  "extends": "standard",
-  "rules": {
-    "indent": ["error", 4],
-    "react/jsx-indent": ["error", 4],
-    "react/jsx-indent-props": ["error", 4],
-    "react/prop-types": 0
-  },
-  "overrides": [
-    {
-      "files": ["**/*.js"]
-    }
-  ],
-  "env": {
-    "browser": true,
-    "node": true,
-    "es6": true
-  }
-}
+// {
+//     "extends": "standard",
+//     "rules": {
+//         "indent": ["error", 4],
+//         "semi": ["error", "always"],
+//         "react/jsx-indent": ["error", 4],
+//         "react/jsx-indent-props": ["error", 4],
+//         "react/prop-types": 0
+//     },
+//     "overrides": [
+//         {
+//             "files": ["**/*.js"]
+//         }
+//     ],
+//     "env": {
+//         "browser": true,
+//         "node": true,
+//         "es6": true
+//     }
+// }
+{}

@@ -96,7 +96,7 @@ const existFavoriteAlbum = async (req, res, next) => {
     try {
         const { id } = await decode(req.headers.token);
         const favorite = await Playlist.findOne({
-            where: { typeId: 1, itemId: req.body.itemId, userId: id }
+            where: { itemId: req.body.itemId, userId: id }
         });
         if (favorite) {
             res.status(409).json({
