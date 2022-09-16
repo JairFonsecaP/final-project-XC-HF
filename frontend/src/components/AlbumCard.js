@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, Rate, Button, Row, Col } from "antd";
+import { Card, Rate, Button, Row, Col, Divider } from "antd";
 import { UserOutlined, HeartFilled, HeartTwoTone } from "@ant-design/icons";
 import axios from "axios";
 import api from "../assets/api";
@@ -7,8 +7,13 @@ import api from "../assets/api";
 import { useHistory } from "react-router-dom";
 
 const AlbumCard = props => {
+  const style = {
+    padding: "8px 0"
+  };
   const history = useHistory();
   const addToFavorite = async () => {
+    props.setErrors([]);
+    props.setLoading(true);
     try {
       if (props.album.favorite) {
         const { data } = await axios.delete(
@@ -25,9 +30,15 @@ const AlbumCard = props => {
         );
       }
       props.setValue("");
-      props.init();
     } catch (e) {
-      console.log(e.message);
+      if (e.response.data.errors) {
+        props.setErrors(e.response.data.errors);
+      } else {
+        props.setErrors(e.message);
+      }
+    } finally {
+      props.setLoading(false);
+      props.init();
     }
   };
   return (
@@ -56,38 +67,46 @@ const AlbumCard = props => {
       ) : (
         <UserOutlined />
       )}
-
+      <Divider orientation="left"></Divider>
       <Row>
-        <Col className="gutter-row">
-          <Button
-            type="primary"
-            album={props.album}
-            onClick={() => {
-              history.push({
-                pathname: `/dashboard/albums/detail/${props.album.id}`,
-                state: { album: props.album }
-              });
-            }}
-          >
-            Details
-          </Button>
+        <Col span={8}>
+          <div style={style}>
+            <Button
+              type="primary"
+              album={props.album}
+              onClick={() => {
+                history.push({
+                  pathname: `/dashboard/albums/detail/${props.album.id}`,
+                  state: { album: props.album }
+                });
+              }}
+            >
+              Details
+            </Button>
+          </div>
         </Col>
-        <Col className="gutter-row">
-          <Rate
-            character={
-              props.album.favorite ? (
-                <HeartFilled />
-              ) : (
-                <HeartTwoTone twoToneColor="#a03f20" />
-              )
-            }
-            value={props.album.favorite}
-            allowClear
-            style={{ color: "#a03f20", fontSize: "28px" }}
-            count="1"
-            tooltips={["Add/Remove album as favorite"]}
-            onChange={addToFavorite}
-          />
+        <Col span={6} offset={10}>
+          <div style={style}>
+            <Rate
+              character={
+                props.album.favorite ? (
+                  <HeartFilled />
+                ) : (
+                  <HeartTwoTone twoToneColor="#a03f20" />
+                )
+              }
+              value={props.album.favorite}
+              allowClear
+              style={{ color: "#a03f20", fontSize: "20px" }}
+              count="1"
+              tooltips={
+                props.album.favorite
+                  ? ["Remove album from favorites"]
+                  : ["Add album to favorites"]
+              }
+              onChange={addToFavorite}
+            />
+          </div>
         </Col>
       </Row>
     </Card>
