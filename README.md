@@ -1,4 +1,4 @@
-# final-project-XC-HF
+# Music Playlist
 
 ## Backend
 
