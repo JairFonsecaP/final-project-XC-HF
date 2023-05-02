@@ -1,7 +1,11 @@
 # Music Playlist
+Search albums and songs easily and create your personal album and songs playlist.
+
+## Technologies
+Front-end: React JS.
+Backend: Node JS.
 
 ## Backend
-
 
 ### DB
 
